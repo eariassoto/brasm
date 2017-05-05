@@ -215,7 +215,7 @@ def main():
 
         if(global_success):
             print("Program compiled. To build the executable run:\
-            \n\tnasm -f elf64 {0}.asm && ld {0}.o".format(global_compiled_filename))
+            \n\tnasm -f elf64 {0}.asm && ld {0}.o -o {0}".format(global_compiled_filename))
     except IOError:
         sys.exit('Error, input file not found!')
 
