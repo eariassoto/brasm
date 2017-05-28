@@ -31,8 +31,8 @@ loop_instr = (instr_spacing + 'jmp      _loop{0}\n' +
               instr_spacing + 'jne      _cloop{0}\n')
 
 # constants
-EXPR_OBJ_PROP_TYPE = 'type'
-EXPR_OBJ_PROP_PAYLOAD = 'payload'
+INSTR_OBJ_PROP_TYPE = 'type'
+INSTR_OBJ_PROP_PAYLOAD = 'payload'
 
 BF_INSTR_TYPE_LOOP = 'loop'
 BF_INSTR_TYPE_OP = 'op'
@@ -48,11 +48,11 @@ global_loop_count = 0
 global_compiled_filename = COMPILED_FILENAME
 
 
-def make_expression_action(type, payload):
-    """ Wraps the expression content into a struct """
+def make_instruction_action(type, payload):
+    """ Wraps the instruction content into a struct """
     obj = {}
-    obj[EXPR_OBJ_PROP_TYPE] = type
-    obj[EXPR_OBJ_PROP_PAYLOAD] = payload
+    obj[INSTR_OBJ_PROP_TYPE] = type
+    obj[INSTR_OBJ_PROP_PAYLOAD] = payload
     return obj
 
 
@@ -73,10 +73,10 @@ def get_program_instr(list_expr):
     """ Transforms a list of brainfuck instructions to assembly code """
     program_str = '';
     for e in list_expr:
-        if e[EXPR_OBJ_PROP_TYPE] == BF_INSTR_TYPE_OP:
-            program_str += asm_instr[e[EXPR_OBJ_PROP_PAYLOAD]]
-        elif e[EXPR_OBJ_PROP_TYPE] == BF_INSTR_TYPE_LOOP:
-            program_str += get_loop_body(get_program_instr(e[EXPR_OBJ_PROP_PAYLOAD]))
+        if e[INSTR_OBJ_PROP_TYPE] == BF_INSTR_TYPE_OP:
+            program_str += asm_instr[e[INSTR_OBJ_PROP_PAYLOAD]]
+        elif e[INSTR_OBJ_PROP_TYPE] == BF_INSTR_TYPE_LOOP:
+            program_str += get_loop_body(get_program_instr(e[INSTR_OBJ_PROP_PAYLOAD]))
     return program_str
 
 
@@ -142,43 +142,43 @@ import ply.lex as lex
 lex.lex()
 
 
-def p_statement_expr(p):
-    ''' statement : expr '''
+def p_program(p):
+    ''' program : instructions '''
     global global_success
     compile_program(p[1])
     global_success = True
 
 
-def p_expression(p):
-    ''' expr : instr
-    | loop
+def p_instructions(p):
+    ''' instructions : simpleInstruction
+    | loop_instruction
     '''
     p[0] = p[1]
 
 
-def p_expression_expansion(p):
-    ''' expr : instr expr
-    | loop expr
+def p_instructions_expansion(p):
+    ''' instructions : simpleInstruction instructions
+    | loop_instruction instructions
     '''
     p[0] = p[1] + p[2]
 
 
-def p_loop(p):
-    ''' loop : LB expr RB
+def p_loop_instruction(p):
+    ''' loop_instruction : LB instructions RB
     '''
-    action = make_expression_action('loop', p[2])
+    action = make_instruction_action('loop', p[2])
     p[0] = [action]
 
 
-def p_instr(p):
-    '''instr : INCR_PTR
+def p_simple_instruction(p):
+    '''simpleInstruction : INCR_PTR
         | DECR_PTR
         | INCR_VAL
         | DECR_VAL
         | WRITE
         | READ
         '''
-    action = make_expression_action('op', p[1])
+    action = make_instruction_action('op', p[1])
     p[0] = [action]
 
 
