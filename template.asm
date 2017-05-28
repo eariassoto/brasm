@@ -8,8 +8,6 @@ section .text
         ; print a byte to stdout
         ; param rcx -> byte to print
 _print_byte:
-        push    rsi
-        push    rdi
         push    rcx                     ; push byte to stack
         mov     rsi, rsp                ; adress to stack
         mov     rax, 1                  ; system call 1 is write
@@ -17,16 +15,12 @@ _print_byte:
         mov     rdx, 1                  ; number of bytes to print
         syscall                         ; call OS system call
         pop     rcx
-        pop     rdi
-        pop     rsi
         ret
 
 
         ; read a byte from stdin
         ; ret rcx <- byte readed from stdin
 _read_byte:
-        push    rsi
-        push    rdi
         sub     rsp, 8                  ; grow stack
         mov     rsi, rsp                ; buf address
         mov     rdi, 0                  ; file handler 0 is stdin
@@ -34,8 +28,6 @@ _read_byte:
         mov     rdx, 1                  ; number of bytes
         syscall                         ; call OS system call
         pop     rcx
-        pop     rdi
-        pop     rsi
         ret
 
 
