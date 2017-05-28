@@ -10,7 +10,7 @@ Lex-Yacc is used to parse the brainfuck program. The compiler outputs x64 Intel 
 
 # How to use Brasm
 ``` bash
-$ python compiler.py hello.bf -h
+$ python compiler.py -h
 usage: compiler.py [-h] [-o O] file
 
 positional arguments:
