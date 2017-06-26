@@ -39,7 +39,7 @@ BF_INSTR_TYPE_OP = 'op'
 BF_INSTR_TYPE_LOOP = 'loop'
 
 TEMPLATE_PLACEHOLDER = '[placeholder]'
-TEMPLATE_FILENAME = 'template.asm'
+TEMPLATE_FILENAME = 'template/template.asm'
 
 COMPILED_FILENAME = 'a'
 
