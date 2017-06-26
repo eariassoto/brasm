@@ -202,7 +202,7 @@ import sys
 def main():
     global global_compiled_filename
     parser = argparse.ArgumentParser()
-    parser.add_argument("file", help="brainfuck input file to pe parsed")
+    parser.add_argument("file", help="brainfuck input file to be parsed")
     parser.add_argument("-o", help="file name for the output assembly code")
     args = parser.parse_args()
     if args.o:
